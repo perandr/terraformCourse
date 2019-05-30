@@ -1,0 +1,9 @@
+terraform.tfvars
+terraform.tfstate.backup
+terraform.tfstate
+.terraform
+t3_micro_priv_key.pub
+t3_micro_priv_key
+t3_micro_pub_key.pub
+*-key
+*key.pub
