@@ -1,12 +1,16 @@
 data "aws_ami" "eks_worker" {
     filter {
         name = "name"
-        values = ["eks-worker-*"]
+        values = ["*eks-node-*"]
     }
 
     most_recent = true
     owners = ["602401143452"] # Amazon
 }
+output "eks_worker-AMI" {
+  value = "${data.aws_ami.eks_worker.image_id}"
+}
+
 
 locals {
   eks_user_data = <<USERDATA
@@ -22,10 +26,25 @@ resource "aws_launch_configuration" "eks_demo" {
   image_id = "${data.aws_ami.eks_worker.image_id}"
   instance_type = "t2.medium"
   name_prefix = "terraform_eks_perandr"
-  security_groups = ["${aws_eks_cluster.perandr_kubernetes.id}"]
+  security_groups = ["${aws_security_group_rule.perandr_eks_ingress_nodes.id}"]
   user_data = "${base64encode(local.eks_user_data)}"
 
   lifecycle{
       create_before_destroy = true
   }
+}
+
+resource "aws_autoscaling_group" "eks_autoscaling" {
+    name = "eks_autoscaling"
+    desired_capacity = 2
+    launch_configuration = "${aws_launch_configuration.eks_demo.id}"
+    max_size = 2
+    min_size = 1
+    vpc_zone_identifier = ["${module.vpc.public_subnets}"]
+
+    tag{
+        key = "Name"
+        value = "terraform-eks"
+        propagate_at_launch = true
+    }
 }

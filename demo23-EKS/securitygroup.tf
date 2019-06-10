@@ -1,3 +1,28 @@
+resource "aws_security_group" "eks_cluster" {
+  name = "eks_cluster"
+  description = "Cluster communication with worker nodes"
+  vpc_id = "${module.vpc.vpc_id}"
+
+  egress{
+      from_port       = 0
+      to_port         = 0
+      protocol        = "-1"
+      cidr_blocks     = ["0.0.0.0/0"]
+  }
+  tags{
+    Name = "eks_cluster"
+  }
+}
+
+resource "aws_security_group_rule" "allow-ingress-node-https" {
+  description = "Allow pods to communicate with cluster API Server"
+  from_port = 443
+  protocol = "tcp"
+  to_port = 443
+  security_group_id = "${aws_security_group.eks_cluster.id}"
+  type = "ingress"
+  cidr_blocks = ["${local.workstation-external-cidr}"]
+}
 resource "aws_security_group" "allow-ssh" {
     vpc_id = "${module.vpc.vpc_id}"
     name = "allow-ssh"

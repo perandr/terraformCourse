@@ -16,11 +16,11 @@ resource "aws_iam_role" "eks_cluster_role" {
     POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "aws_iam_role_policy_attachment.perandr_eks_AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "perandr_eks_AmazonEKSClusterPolicy" {
     policy_arn = "arn:aws:iam:aws:policy/AmazonEKSClusterPolicy"
     role = "${aws_iam_role.eks_cluster_role.name}"
 }
-resource "aws_iam_role_policy_attachment" "aws_iam_role_policy_attachment.perandr_eks_AmazonEKSServicePolicy" {
+resource "aws_iam_role_policy_attachment" "perandr_eks_AmazonEKSServicePolicy" {
     policy_arn = "arn:aws:iam:aws:policy/AmazonEKSServicePolicy"
     role = "${aws_iam_role.eks_cluster_role.name}"
 }
