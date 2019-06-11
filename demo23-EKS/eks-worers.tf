@@ -26,7 +26,8 @@ resource "aws_launch_configuration" "eks_demo" {
   image_id = "${data.aws_ami.eks_worker.image_id}"
   instance_type = "t2.medium"
   name_prefix = "terraform_eks_perandr"
-  security_groups = ["${aws_security_group_rule.perandr_eks_ingress_nodes.id}"]
+  security_groups = ["${aws_security_group.eks_cluster_node.id}"]
+
   user_data = "${base64encode(local.eks_user_data)}"
 
   lifecycle{
