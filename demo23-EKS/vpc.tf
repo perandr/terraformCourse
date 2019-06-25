@@ -13,7 +13,7 @@ module "vpc" {
 
     tags = "${
         map(
-        "Name", "demo23-perandr-eks",
+        "Name", "perandr_vpc",
         "kubernetes.io/cluster/${var.eks_cluster_name}", "shared",
         ) 
     }"

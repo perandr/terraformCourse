@@ -32,8 +32,17 @@ resource "aws_security_group_rule" "perandr_eks_ingress_cluster" {
     from_port = 1025
     protocol = "tcp"    
     security_group_id = "${aws_security_group.eks_cluster_node.id}"
-    source_security_group_id = "${aws_security_group.eks_cluster_node.id}"
+    source_security_group_id = "${aws_security_group.eks_cluster.id}"
     to_port = 65535
     type = "ingress"
 }
 
+resource "aws_security_group_rule" "https_nodes_to_plane" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = "${aws_security_group.eks_cluster.id}"
+  source_security_group_id = "${aws_security_group.eks_cluster_node.id}"
+  depends_on = ["aws_security_group.eks_cluster", "aws_security_group.eks_cluster_node" ]
+}

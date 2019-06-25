@@ -11,4 +11,5 @@ resource "aws_eks_cluster" "perandr_kubernetes" {
         "aws_iam_role_policy_attachment.perandr_eks_AmazonEKSClusterPolicy",
         "aws_iam_role_policy_attachment.perandr_eks_AmazonEKSServicePolicy",
     ]
+    
 }
